@@ -1,0 +1,8 @@
+
+node_modules
+./comments/node_modules
+./events/node_modules
+./client/node_modules
+./moderation/node_modules
+./posts/node_modules
+./query/node_modules
