@@ -43,23 +43,26 @@ app.get("/comments", (req, res) => {
   res.send(commentsByPostId);
 });
 
-app.post("/events", (req, res) => {
+app.post("/events", async (req, res) => {
   console.log("Event type: ", req.body.type);
   const { type, data } = req.body;
 
   if (type === "CommentModerated") {
+    console.log("came here alse");
     const { postId } = data;
-    const _index = commentsByPostId.postId.find(
+    const _index = commentsByPostId[postId].findIndex(
       (comment) => comment.id === data.id
     );
-    commentsByPostId.postId[_index] = {
-      ...commentsByPostId.postId[_index],
+    commentsByPostId[postId][_index] = {
+      id: data.id,
+      content: data.content,
+      postId: data.postId,
       status: data.status,
     };
 
-    axios.post("http://localhost:4005", {
+    await axios.post("http://localhost:4005/events", {
       type: "CommentUpdated",
-      data: commentsByPostId.data.postId[_index],
+      data: { ...commentsByPostId[postId][_index] },
     });
   }
 
